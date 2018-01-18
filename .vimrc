@@ -1,5 +1,5 @@
  
-"""""""""""""""""""" ~/.vimrc por janjo """"""""""""""""""" "
+"""""""""""""""""""" ~/.vimrc por janjo && joaopandolfi """"""""""""""""""" "
 "
 "" Retorna verdadeiro se o modo de copiar e colar estiver ativado
 function! HasPaste()
@@ -65,7 +65,7 @@ endfunction
   set showmatch
   set mat=10
   set ve=all
-
+  set mouse=a
 
  """""""""""""""""""" 3) Cores e fontes """"""""""""""""""""
   set number
@@ -76,9 +76,9 @@ endfunction
   set wrap
   set expandtab
   set smarttab
-  set shiftwidth=2
-  set tabstop=2
-  set softtabstop=2
+  set shiftwidth=4
+  set tabstop=4
+  set softtabstop=0
   set autoindent                                  
   set laststatus=2
   set statusline=\ %{HasPaste()}\ Arquivo:\ %F%m%r%h\ %w\ \ Diretório\ de\ trabalho:\ %r%{getcwd()}%h\ -\ Linha:\ %l\ -\ Coluna:\ %c
@@ -88,7 +88,8 @@ endfunction
    map  <C-l> :tabn<CR>
    map  <C-h> :tabp<CR>
    map  <C-n> :tabnew<CR>
-      
+   map  <C-o> :tabnext<CR>
+   map  <C-i> :tabprev<CR>
        
   " RSpec.vim mapeamento  
    map <Leader>t :call RunCurrentSpecFile()<CR>
@@ -108,3 +109,21 @@ set term=screen-256color
 if filereadable(expand("~/.vim/plugin/abbreviations.vim"))
     source ~/.vim/plugin/abbreviations.vim
 endif  
+
+
+"====== complementação de palavras ====
+"usa o tab em modo insert para completar palavras
+function! InsertTabWrapper(direction)
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    elseif "backward" == a:direction
+        return "\<c-p>"
+    else
+        return "\<c-n>"
+    endif
+endfunction
+inoremap <tab> <c-r>=InsertTabWrapper ("forward")<cr>
+inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
+
+syntax on
