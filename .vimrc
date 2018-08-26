@@ -40,6 +40,11 @@ Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-surround'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'elixir-editors/vim-elixir'
+Plugin 'kien/ctrlp.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
                           
 
 " All of your Plugins must be added before the following line
@@ -103,12 +108,12 @@ map <Leader>a :call RunAllSpecs()<CR>
 autocmd vimenter * NERDTree
 map <C-n> :NERDTreeToggle<CR>
 
+
 " Personal use mappings
 imap ff <ESC> 
 map  <F4> <Esc>:set nu!<cr>
-nmap <F2> :w<cr>
-nmap <F3> <ESC>:q<cr>
-nmap bf <Esc>:bf<cr>
+nmap ss <Esc>:w<cr>
+nmap cc <ESC>:q<cr>
  
 set term=screen-256color
 
@@ -132,4 +137,16 @@ endfunction
 
 inoremap <tab> <c-r>=InsertTabWrapper ("forward")<cr>
 inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
+
+
+"====== Mapping surround tags erbs ======"
+let b:surround_{char2nr('=')} = "<%= \r %>"
+let b:surround_{char2nr('-')} = "<% \r %>"
+
+
+"====== Mapping  airline======"
+let g:airline_section_b = '%{strftime("%c")}'
+let g:airline_section_y = 'BN: %{strftime("%c")}'
+
+
 
