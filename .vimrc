@@ -44,6 +44,7 @@ Plugin 'elixir-editors/vim-elixir'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'Townk/vim-autoclose'
 
                           
 
