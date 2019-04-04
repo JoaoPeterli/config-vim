@@ -25,10 +25,7 @@ Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " My plugins
 Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-rake'
-Plugin 'thoughtbot/vim-rspec'
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-bundler'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
@@ -41,12 +38,17 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-surround'
 Plugin 'vim-syntastic/syntastic'
-Plugin 'elixir-editors/vim-elixir'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Townk/vim-autoclose'
-
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'prettier/vim-prettier'
+Plugin 'pangloss/vim-javascript'
+Plugin 'posva/vim-vue'
+Plugin 'leafOfTree/vim-vue-plugin'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
                           
 
 " All of your Plugins must be added before the following line
@@ -150,5 +152,6 @@ let b:surround_{char2nr('-')} = "<% \r %>"
 let g:airline_section_b = '%{strftime("%c")}'
 let g:airline_section_y = 'BN: %{strftime("%c")}'
 
-
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.jsx,*.js,*.json,*.css,*.scss,*.less,*.graphql
 
