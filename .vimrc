@@ -1,70 +1,59 @@
-
 """""""""""""""""""" ~/.vimrc por janjo && joaopandolfi """"""""""""""""""" "
-" Returns true if copy and paste mode is enabled
+
+" --- Helpers ---
 function! HasPaste()
-        if &paste
-            return 'PASTE MODE ON '
-        en
-            return 'PASTE MODE OFF '
-        return ''
+  if &paste
+    return 'PASTE MODE ON '
+  endif
+  return 'PASTE MODE OFF '
 endfunction
 
-
-"""""""""""""""""""" General settings """"""""""""""""""""
-"
-" Uses vim settings, not vi
+" --- General ---
 set nocompatible
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " My plugins
 Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'scrooloose/nerdtree'
+Plugin 'preservim/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'christoomey/vim-tmux-navigator' 
-Plugin 'itchyny/lightline.vim'
-Plugin 'acoustichero/goldenrod.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-surround'
 Plugin 'vim-syntastic/syntastic'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Townk/vim-autoclose'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'prettier/vim-prettier'
+Plugin 'prettier/vim-prettier', { 'do': 'npm install' }
 Plugin 'pangloss/vim-javascript'
 Plugin 'posva/vim-vue'
 Plugin 'leafOfTree/vim-vue-plugin'
 Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
-                          
+Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 
-" All of your Plugins must be added before the following line
-call vundle#end()     " required
-set nocompatible      " We're running Vim, not Vi!
-syntax on             " Enable syntax highlighting
-filetype on           " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
-filetype plugin on    " Enable filetype-specific plugins
+call vundle#end()
+
+syntax on
+filetype plugin indent on
 
 set history=1000
-" Reloads the file if it is edited by an external program while open
 set autoread
 set nobackup
 
-"""""""""""""""""""" Vim interface """""""""""""""""""""
+" --- UI ---
 set wildmenu
 set ruler
 set cmdheight=2
@@ -74,84 +63,85 @@ set hlsearch
 set magic
 set showmatch
 set mat=10
-set ve=all
 
-
-""""""""""""""""""" Colors and fonts """"""""""""""""""""
+" --- Colors & indent ---
 set number
 syntax enable
 set background=dark
-colorscheme goldenrod
-set nolinebreak
+colorscheme onehalfdark
+let g:airline_theme='onehalfdark'
 set wrap
+set nolinebreak
 set expandtab
 set smarttab
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2
-set autoindent                                  
+set autoindent
 set laststatus=2
 set statusline=\ %{HasPaste()}\ Arquivo:\ %F%m%r%h\ %w\ \ Diretório\ de\ trabalho:\ %r%{getcwd()}%h\ -\ Linha:\ %l\ -\ Coluna:\ %c
+
+" Undo persistente
+set undofile
 set undodir=~/.vim/undobackups
-               
-" Mapping tabs
-map  <C-l> :tabn<CR>
-map  <C-h> :tabp<CR>
-map  <C-n> :tabnew<CR>
-map  <C-o> :tabnext<CR>
-map  <C-i> :tabprev<CR>
-     
-" Mapping RSpec.vim   
-map <Leader>t :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
 
+" --- Tabs mapeamentos ---
+nnoremap <C-l> :tabnext<CR>
+nnoremap <C-h> :tabprevious<CR>
+nnoremap <C-n> :tabnew<CR>
+" removidos os antigos <C-o> e <C-i> para preservar go-back/go-forward padrão
 
-" Nerdtree settings
-autocmd vimenter * NERDTree
-map <C-n> :NERDTreeToggle<CR>
+" --- Go back / forward personalizados ---
+nnoremap gb <C-o>   " voltar pro arquivo anterior
+nnoremap gB <C-i>   " avançar novamente
 
+" --- RSpec (se usar rspec.vim) ---
+nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
+nnoremap <Leader>s :call RunNearestSpec()<CR>
+nnoremap <Leader>l :call RunLastSpec()<CR>
+nnoremap <Leader>a :call RunAllSpecs()<CR>
 
-" Personal use mappings
-imap ff <ESC> 
-map  <F4> <Esc>:set nu!<cr>
-nmap ss <Esc>:w<cr>
-nmap cc <ESC>:q<cr>
- 
-set term=screen-256color
+" --- Nerdtree ---
+autocmd VimEnter * NERDTree
+nnoremap <leader>n :NERDTreeToggle<CR>
+
+" --- Pessoais ---
+inoremap ff <ESC>
+nnoremap <F4> :set nu!<CR>
+nnoremap ss :w<CR>
+nnoremap cc :q<CR>
 
 if filereadable(expand("~/.vim/plugin/abbreviations.vim"))
-    source ~/.vim/plugin/abbreviations.vim
+  source ~/.vim/plugin/abbreviations.vim
 endif  
 
-
-"====== Word complementation ====
-"Use also insert mode to complete words
+" --- Word completion ---
 function! InsertTabWrapper(direction)
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    elseif "backward" == a:direction
-        return "\<c-p>"
-    else
-        return "\<c-n>"
-    endif
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<Tab>"
+  elseif a:direction ==# 'backward'
+    return "\<C-p>"
+  else
+    return "\<C-n>"
+  endif
 endfunction
+inoremap <Tab>   <C-r>=InsertTabWrapper('forward')<CR>
+inoremap <S-Tab> <C-r>=InsertTabWrapper('backward')<CR>
 
-inoremap <tab> <c-r>=InsertTabWrapper ("forward")<cr>
-inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
+" --- Surround para ERB (em buffers ERB) ---
+augroup erb_surround
+  autocmd!
+  autocmd FileType eruby let b:surround_{char2nr('=')} = "<%= \r %>"
+  autocmd FileType eruby let b:surround_{char2nr('-')} = "<% \r %>"
+augroup END
 
-
-"====== Mapping surround tags erbs ======"
-let b:surround_{char2nr('=')} = "<%= \r %>"
-let b:surround_{char2nr('-')} = "<% \r %>"
-
-
-"====== Mapping  airline======"
+" --- Airline ---
 let g:airline_section_b = '%{strftime("%c")}'
 let g:airline_section_y = 'BN: %{strftime("%c")}'
 
+" --- Prettier ---
 let g:prettier#autoformat = 0
-autocmd BufWritePre *.jsx,*.js,*.json,*.css,*.scss,*.less,*.graphql
+autocmd BufWritePre *.jsx,*.js,*.ts,*.tsx,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
+
 
