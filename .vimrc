@@ -105,6 +105,9 @@ nnoremap <Leader>a :call RunAllSpecs()<CR>
 autocmd VimEnter * NERDTree
 nnoremap <leader>n :NERDTreeToggle<CR>
 
+" Mostrar arquivos ocultos (como .env) no NERDTree
+let NERDTreeShowHidden=1
+
 " --- Pessoais ---
 inoremap ff <ESC>
 nnoremap <F4> :set nu!<CR>
@@ -143,5 +146,4 @@ let g:airline_section_y = 'BN: %{strftime("%c")}'
 " --- Prettier ---
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.jsx,*.js,*.ts,*.tsx,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
-
 
